@@ -1,0 +1,194 @@
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme{
+  --color-love-50: #fff0f3;
+  --color-love-100: #ffccd5;
+  --color-love-200: #ffb3c1;
+  --color-love-300: #ff85a1;
+  --color-love-400: #f72585;
+  --color-love-500: #ff0a54;
+  --color-love-600: #ea0043;
+  --color-love-700: #c90038;
+  --color-love-800: #a3002b;
+  --color-love-900: #7d0020;
+
+  --color-gold-100: #fef08a;
+  --color-gold-400: #facc15;
+  --color-gold-500: #eab308;
+  --color-gold-600: #ca8a04;
+
+  --font-sans: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-serif: 'Playfair Display', Georgia, serif;
+  --font-cursive: 'Great Vibes', cursive, serif;
+
+  --animate-heartbeat: heartbeat 1.5s ease-in-out infinite;
+  --animate-float: float 4s ease-in-out infinite;
+  --animate-rose-fall: rose-fall 10s linear infinite;
+  --animate-sparkle: sparkle 2s ease-in-out infinite;
+  --animate-glow: glow 2s ease-in-out infinite;
+  --animate-fade-in: fadeIn 0.8s ease-out forwards;
+  --animate-slide-up: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Custom Keyframes */
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  25% { transform: scale(1.1); }
+  40% { transform: scale(1.03); }
+  60% { transform: scale(1.15); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-12px) rotate(2deg); }
+}
+
+@keyframes rose-fall {
+  0% {
+    transform: translateY(-5vh) translateX(0) rotate(0deg);
+    opacity: 0;
+  }
+  10% { opacity: 0.8; }
+  90% { opacity: 0.6; }
+  100% {
+    transform: translateY(105vh) translateX(120px) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+@keyframes sparkle {
+  0%, 100% { opacity: 0.3; transform: scale(0.9); }
+  50% { opacity: 1; transform: scale(1.1); filter: drop-shadow(0 0 6px rgba(255, 10, 84, 0.6)); }
+}
+
+@keyframes glow {
+  0%, 100% { box-shadow: 0 0 10px rgba(255, 10, 84, 0.2), 0 0 20px rgba(255, 10, 84, 0.1); }
+  50% { box-shadow: 0 0 25px rgba(255, 10, 84, 0.5), 0 0 40px rgba(255, 10, 84, 0.3); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(255, 240, 243, 0.5);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 10, 84, 0.3);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 10, 84, 0.6);
+}
+
+/* Glassmorphism Panels */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.45);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+}
+
+.glass-panel-dark {
+  background: rgba(125, 0, 32, 0.15);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.glass-input {
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(255, 179, 193, 0.6);
+  transition: all 0.3s ease;
+}
+.glass-input:focus {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: #ff0a54;
+  box-shadow: 0 0 10px rgba(255, 10, 84, 0.15);
+  outline: none;
+}
+
+/* Romantic Background Grid */
+.bg-romantic-grid {
+  background-image: 
+    radial-gradient(circle at 20% 30%, rgba(255, 204, 213, 0.4) 0%, transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(255, 133, 161, 0.3) 0%, transparent 40%),
+    linear-gradient(135deg, #fff0f3 0%, #ffccd5 100%);
+}
+
+.bg-romantic-night {
+  background-image: 
+    radial-gradient(circle at 30% 20%, rgba(234, 0, 67, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 70% 80%, rgba(125, 0, 32, 0.25) 0%, transparent 50%),
+    linear-gradient(185deg, #2b000a 0%, #0d0003 100%);
+}
+
+/* Heart & Rose Particles */
+.heart-particle {
+  position: absolute;
+  pointer-events: none;
+  animation: float-heart 6s ease-in-out forwards;
+}
+
+@keyframes float-heart {
+  0% {
+    transform: translateY(105vh) translateX(0) scale(0.5) rotate(0deg);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.8;
+  }
+  90% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(-10vh) translateX(var(--tx, 30px)) scale(var(--scale, 1)) rotate(var(--rot, 180deg));
+    opacity: 0;
+  }
+}
+
+/* Heart-Shaped Camera Frame */
+.heart-frame {
+  clip-path: path('M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z');
+}
+
+/* Fireworks effects for final proposal stage */
+.firework {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: explode 1s ease-out forwards;
+}
+
+@keyframes explode {
+  0% { transform: scale(1); opacity: 1; }
+  100% { transform: scale(40); opacity: 0; }
+}
+
+/* Floating custom toast */
+.love-toast {
+  animation: slideInToast 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, fadeOutToast 0.4s ease-in 4.6s forwards;
+}
+
+@keyframes slideInToast {
+  from { transform: translateY(100px) scale(0.8); opacity: 0; }
+  to { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+@keyframes fadeOutToast {
+  from { transform: translateY(0) scale(1); opacity: 1; }
+  to { transform: translateY(-30px) scale(0.9); opacity: 0; }
+}

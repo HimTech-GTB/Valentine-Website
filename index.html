@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eternal Love - Surprise Your GF</title>
+  <meta name="description" content="Create a personalized, cinematic Valentine's proposal surprise for your partner with games, photos, countdowns, and secret gifts.">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>❤️ </text></svg>">
+  <link rel="stylesheet" href="/src/style.css">
+</head>
+<body class="bg-romantic-grid min-h-screen text-slate-800 font-sans antialiased overflow-x-hidden relative">
+
+  <!-- Floating particles background -->
+  <div id="particles-container" class="absolute inset-0 pointer-events-none z-0 overflow-hidden"></div>
+
+  <!-- Main Navbar -->
+  <nav class="w-full py-4 px-6 flex justify-between items-center relative z-10 glass-panel border-b mb-6">
+    <div class="flex items-center gap-2">
+      <span class="text-love-500 animate-heartbeat text-3xl font-cursive font-bold">Eternal Love</span>
+    </div>
+    <div class="flex items-center gap-4">
+      <button id="nav-logout-btn" class="hidden px-4 py-2 text-sm font-semibold text-love-600 hover:text-love-700 bg-white/60 hover:bg-love-50 rounded-full border border-love-200 transition duration-300 flex items-center gap-1">
+        <i data-lucide="log-out" class="w-4 h-4"></i> Sign Out
+      </button>
+    </div>
+  </nav>
+
+  <!-- Content Wrapper -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 relative z-10">
+    
+    <!-- 1. LANDING & AUTH VIEW -->
+    <div id="auth-view" class="w-full flex flex-col items-center justify-center py-6">
+      
+      <!-- Hero Intro -->
+      <div class="text-center max-w-2xl mb-8 animate-fade-in">
+        <h1 class="text-5xl sm:text-6xl font-serif font-black text-slate-900 leading-tight mb-4">
+          Create an Unforgettable <span class="text-love-500 relative inline-block">Surprise<span class="absolute bottom-1 left-0 w-full h-2 bg-love-100 -z-1"></span></span>
+        </h1>
+        <p class="text-lg text-slate-600 font-medium">
+          Create a personalized, lock-protected, romantic cinematic proposal website for your partner. Complete with camera capture, timeline memories, relationship games, mystery gift boxes, and love letters.
+        </p>
+      </div>
+
+      <!-- Auth Card -->
+      <div class="w-full max-w-md glass-panel rounded-3xl shadow-2xl p-8 relative overflow-hidden transition duration-500 hover:shadow-love-100/40">
+        
+        <!-- Toggle Tabs -->
+        <div class="flex border-b border-love-100 mb-6">
+          <button id="tab-login" class="flex-1 pb-3 text-center font-bold text-love-500 border-b-2 border-love-500 transition cursor-pointer">Sign In</button>
+          <button id="tab-register" class="flex-1 pb-3 text-center font-semibold text-slate-400 hover:text-love-400 transition cursor-pointer">Register</button>
+        </div>
+
+        <!-- Login Form -->
+        <form id="login-form" class="space-y-5">
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Gmail Address</label>
+            <div class="relative">
+              <input type="email" id="login-email" required placeholder="your.name@gmail.com" class="w-full px-4 py-3 pl-10 rounded-xl glass-input text-sm">
+              <i data-lucide="mail" class="absolute left-3.5 top-3.5 text-slate-400 w-4 h-4"></i>
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Password</label>
+            <div class="relative">
+              <input type="password" id="login-password" required placeholder="Enter password (letters/numbers only)" class="w-full px-4 py-3 pl-10 rounded-xl glass-input text-sm">
+              <i data-lucide="lock" class="absolute left-3.5 top-3.5 text-slate-400 w-4 h-4"></i>
+            </div>
+          </div>
+          <button type="submit" class="w-full py-3 bg-gradient-to-r from-love-500 to-love-600 hover:from-love-600 hover:to-love-700 text-white rounded-xl font-bold shadow-lg shadow-love-500/20 hover:shadow-love-500/35 transition cursor-pointer duration-300 transform active:scale-95 flex justify-center items-center gap-2">
+            <i data-lucide="heart" class="w-4 h-4 fill-white"></i> Sign In to Creator Mode
+          </button>
+        </form>
+
+        <!-- Register Form -->
+        <form id="register-form" class="space-y-4 hidden">
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">Full Name</label>
+            <div class="relative">
+              <input type="text" id="register-name" required placeholder="Alphabetic characters and spaces only" class="w-full px-4 py-3 pl-10 rounded-xl glass-input text-sm">
+              <i data-lucide="user" class="absolute left-3.5 top-3.5 text-slate-400 w-4 h-4"></i>
+            </div>
+            <p id="reg-name-error" class="hidden text-xs text-love-500 mt-1 font-semibold animate-pulse"></p>
+          </div>
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">Gmail Address</label>
+            <div class="relative">
+              <input type="email" id="register-email" required placeholder="Strictly @gmail.com required" class="w-full px-4 py-3 pl-10 rounded-xl glass-input text-sm">
+              <i data-lucide="mail" class="absolute left-3.5 top-3.5 text-slate-400 w-4 h-4"></i>
+            </div>
+            <p id="reg-email-error" class="hidden text-xs text-love-500 mt-1 font-semibold animate-pulse"></p>
+          </div>
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">Password</label>
+            <div class="relative">
+              <input type="password" id="register-password" required placeholder="Alphanumeric only (letters & numbers)" class="w-full px-4 py-3 pl-10 rounded-xl glass-input text-sm">
+              <i data-lucide="lock" class="absolute left-3.5 top-3.5 text-slate-400 w-4 h-4"></i>
+            </div>
+            <p id="reg-pass-error" class="hidden text-xs text-love-500 mt-1 font-semibold animate-pulse"></p>
+          </div>
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">Confirm Password</label>
+            <div class="relative">
+              <input type="password" id="register-confirm-password" required placeholder="Repeat your password" class="w-full px-4 py-3 pl-10 rounded-xl glass-input text-sm">
+              <i data-lucide="shield-check" class="absolute left-3.5 top-3.5 text-slate-400 w-4 h-4"></i>
+            </div>
+            <p id="reg-confirm-error" class="hidden text-xs text-love-500 mt-1 font-semibold animate-pulse"></p>
+          </div>
+          <button type="submit" class="w-full py-3 bg-gradient-to-r from-love-400 to-love-500 hover:from-love-500 hover:to-love-600 text-white rounded-xl font-bold shadow-lg shadow-love-500/20 hover:shadow-love-500/35 transition cursor-pointer duration-300 transform active:scale-95 flex justify-center items-center gap-2">
+            <i data-lucide="sparkles" class="w-4 h-4"></i> Create Free Account
+          </button>
+        </form>
+
+        <div class="relative my-6 text-center">
+          <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-love-100"></div></div>
+          <span class="relative px-3 bg-white/20 text-xs font-bold uppercase text-slate-400 backdrop-blur-sm">Or Continue With</span>
+        </div>
+
+        <!-- Google Login Mock -->
+        <button id="google-auth-btn" class="w-full py-3 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 rounded-xl font-semibold shadow-sm transition duration-300 flex justify-center items-center gap-2 cursor-pointer transform active:scale-95">
+          <svg class="w-5 h-5" viewBox="0 0 24 24">
+            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22c-.87-2.6-2.94-4.53-5.81-4.53z"/>
+            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+          </svg>
+          Continue with Google
+        </button>
+
+      </div>
+    </div>
+
+    <!-- 2. CREATOR DASHBOARD VIEW -->
+    <div id="creator-view" class="w-full hidden space-y-6 animate-fade-in">
+      
+      <!-- Dashboard Header -->
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white/40 p-6 rounded-3xl border border-white/60 backdrop-blur-md">
+        <div>
+          <h2 class="text-3xl font-serif font-black text-slate-800 flex items-center gap-2">
+            Creator Dashboard <i data-lucide="sparkles" class="text-love-500 fill-love-100"></i>
+          </h2>
+          <p id="creator-welcome-msg" class="text-sm font-semibold text-slate-500">Welcome, Creator ❤️ Let's build something magical.</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <button id="btn-tab-wizard" class="px-5 py-2.5 rounded-xl font-bold bg-love-500 text-white shadow-md shadow-love-500/10 transition duration-300 flex items-center gap-1.5 cursor-pointer">
+            <i data-lucide="heart-handshake" class="w-4 h-4"></i> Surprise Wizard
+          </button>
+          <button id="btn-tab-responses" class="px-5 py-2.5 rounded-xl font-bold bg-white text-love-600 hover:bg-love-50 hover:text-love-700 shadow-sm border border-love-200 transition duration-300 flex items-center gap-1.5 cursor-pointer">
+            <i data-lucide="folder-heart" class="w-4 h-4"></i> Receiver Activity
+          </button>
+        </div>
+      </div>
+
+      <!-- TABS: 2A. WIZARD CREATION FLOW -->
+      <div id="wizard-container" class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        
+        <!-- Step Navigation Sidebar (Hidden on mobile) -->
+        <div class="hidden lg:block glass-panel p-6 rounded-3xl h-fit space-y-2 lg:col-span-1 border">
+          <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 px-3 mb-4">Steps of Love</h3>
+          <nav class="space-y-1.5">
+            <button data-step="1" class="w-full text-left px-4 py-3 rounded-xl font-bold text-sm flex items-center gap-3 transition cursor-pointer bg-love-500 text-white shadow-md shadow-love-500/10">
+              <span class="w-6 h-6 rounded-full bg-white/20 text-white flex items-center justify-center text-xs">1</span> Partner Profile
+            </button>
+            <button data-step="2" class="w-full text-left px-4 py-3 rounded-xl font-semibold text-sm flex items-center gap-3 transition cursor-pointer hover:bg-love-50 text-slate-600 hover:text-love-500">
+              <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-xs">2</span> Photo Gallery
+            </button>
+            <button data-step="3" class="w-full text-left px-4 py-3 rounded-xl font-semibold text-sm flex items-center gap-3 transition cursor-pointer hover:bg-love-50 text-slate-600 hover:text-love-500">
+              <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-xs">3</span> Love Journey
+            </button>
+            <button data-step="4" class="w-full text-left px-4 py-3 rounded-xl font-semibold text-sm flex items-center gap-3 transition cursor-pointer hover:bg-love-50 text-slate-600 hover:text-love-500">
+              <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-xs">4</span> Gifts & Trivia
+            </button>
+            <button data-step="5" class="w-full text-left px-4 py-3 rounded-xl font-semibold text-sm flex items-center gap-3 transition cursor-pointer hover:bg-love-50 text-slate-600 hover:text-love-500">
+              <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-xs">5</span> PIN & Link
+            </button>
+          </nav>
+        </div>
+
+        <!-- Wizard Editing Area -->
+        <div class="lg:col-span-3 glass-panel p-8 rounded-3xl shadow-xl relative border">
+          <!-- Mobile Hamburger Steps Menu Toggle -->
+          <div class="flex items-center gap-3 mb-4 lg:hidden border-b border-love-100 pb-3">
+            <button id="btn-toggle-steps" type="button" class="p-2 bg-white/60 text-love-600 border border-love-200 rounded-xl flex items-center justify-center cursor-pointer hover:bg-love-50 transition active:scale-95">
+              <i data-lucide="menu" class="w-5 h-5"></i>
+            </button>
+            <span class="text-sm font-bold text-slate-700">Steps of Love</span>
+          </div>
+
+          <div id="active-project-tag" class="hidden absolute top-4 right-6 bg-love-100 text-love-600 text-xs font-bold px-3 py-1 rounded-full border border-love-200 lg:block">
+            Editing Active Proposal
+          </div>
+          
+          <!-- STEP 1: Partner Information -->
+          <div id="step-pane-1" class="step-pane space-y-6">
+            <div>
+              <h3 class="text-2xl font-serif font-black text-slate-800">Tell us about them</h3>
+              <p class="text-sm text-slate-500">Provide the fundamental details of your partner to tailor the visual references.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Partner's Full Name *</label>
+                <input type="text" id="p-name" placeholder="e.g. Sarah Elizabeth Jenkins" class="w-full px-4 py-3 rounded-xl glass-input text-sm">
+              </div>
+              <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Sweet Nickname (optional)</label>
+                <input type="text" id="p-nickname" placeholder="e.g. My Princess, Sweetheart" class="w-full px-4 py-3 rounded-xl glass-input text-sm">
+              </div>
+            </div>
+            <div class="space-y-4">
+              <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Proposal Title *</label>
+                <input type="text" id="p-title" placeholder="e.g. Will You Be My Valentine?" class="w-full px-4 py-3 rounded-xl glass-input text-sm">
+              </div>
+              <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Custom Proposal Subtitle/Message (optional)</label>
+                <textarea id="p-message" rows="3" placeholder="e.g. From the moment we met, my world has been brighter. Will you do me the honor of being mine?" class="w-full px-4 py-3 rounded-xl glass-input text-sm"></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 2: Photo Gallery & Cover -->
+          <div id="step-pane-2" class="step-pane space-y-6 hidden">
+            <div>
+              <h3 class="text-2xl font-serif font-black text-slate-800">Couple Memories & Media</h3>
+              <p class="text-sm text-slate-500">Upload high-resolution couple photos. Uploaded assets are securely saved to Supabase Storage.</p>
+            </div>
+            
+            <div class="space-y-4">
+              <!-- Cover Image upload -->
+              <div class="border-2 border-dashed border-love-200 rounded-2xl p-6 text-center hover:bg-love-50/30 transition duration-300">
+                <label class="cursor-pointer block">
+                  <i data-lucide="image-up" class="w-10 h-10 text-love-400 mx-auto mb-2"></i>
+                  <span class="text-sm font-bold text-slate-700 block">Upload Main Background Cover Image</span>
+                  <span class="text-xs text-slate-400 block mt-1">PNG, JPG up to 5MB (Replaces default romantic wallpaper)</span>
+                  <input type="file" id="p-cover-upload" accept="image/*" class="hidden">
+                </label>
+                <div id="p-cover-preview" class="hidden mt-4 relative mx-auto max-w-xs rounded-xl overflow-hidden border shadow-md">
+                  <img src="" class="w-full h-40 object-cover">
+                  <button id="p-cover-remove" class="absolute top-2 right-2 p-1.5 bg-black/60 hover:bg-black/80 rounded-full text-white text-xs transition cursor-pointer">
+                    <i data-lucide="trash" class="w-4 h-4"></i>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Gallery Images upload -->
+              <div class="border-2 border-dashed border-love-200 rounded-2xl p-6 text-center hover:bg-love-50/30 transition duration-300">
+                <label class="cursor-pointer block">
+                  <i data-lucide="images" class="w-10 h-10 text-love-400 mx-auto mb-2"></i>
+                  <span class="text-sm font-bold text-slate-700 block">Add Gallery Memories (Maximum 6 Photos)</span>
+                  <span class="text-xs text-slate-400 block mt-1">Upload pictures of your happiest memories together</span>
+                  <input type="file" id="p-gallery-upload" accept="image/*" multiple class="hidden">
+                </label>
+              </div>
+
+              <!-- Image Gallery Previews -->
+              <div id="gallery-preview-container" class="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-4">
+                <!-- Preview items will be appended here -->
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 3: Personal Love Story & Timeline -->
+          <div id="step-pane-3" class="step-pane space-y-6 hidden">
+            <div>
+              <h3 class="text-2xl font-serif font-black text-slate-800">Your Love Story Details</h3>
+              <p class="text-sm text-slate-500">Write custom secret notes, relationship timelines, and configure the time countdown.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Relationship Start Date (Countdown)</label>
+                <input type="date" id="p-countdown-date" class="w-full px-4 py-3 rounded-xl glass-input text-sm">
+                <p class="text-xs text-slate-400 mt-1">Calculates days, hours, and minutes of your journey.</p>
+              </div>
+              <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">First Meeting Date (Timeline Start)</label>
+                <input type="date" id="p-first-meet-date" class="w-full px-4 py-3 rounded-xl glass-input text-sm">
+              </div>
+            </div>
+
+            <!-- Love Letter -->
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Cinematic Love Letter *</label>
+              <textarea id="p-love-letter" rows="5" placeholder="Dear sweetheart... Write your beautiful handwritten message that will be revealed inside the custom cinematic envelope." class="w-full px-4 py-3 rounded-xl glass-input text-sm font-serif"></textarea>
+            </div>
+
+            <!-- Custom Love Cards (Memories) -->
+            <div class="space-y-4">
+              <div class="flex justify-between items-center">
+                <h4 class="text-sm font-bold uppercase tracking-wider text-slate-500">Love Messages / Custom Cards</h4>
+                <button id="add-love-msg-btn" class="px-3 py-1 bg-love-50 hover:bg-love-100 text-love-600 rounded-lg text-xs font-bold border border-love-200 flex items-center gap-1 transition cursor-pointer">
+                  <i data-lucide="plus" class="w-3.5 h-3.5"></i> Add Message
+                </button>
+              </div>
+              <div id="love-msg-container" class="space-y-3">
+                <!-- Dynamically populated cards -->
+              </div>
+            </div>
+
+            <!-- Custom Timeline Events -->
+            <div class="space-y-4">
+              <div class="flex justify-between items-center">
+                <h4 class="text-sm font-bold uppercase tracking-wider text-slate-500">Relationship Milestones (Timeline)</h4>
+                <button id="add-timeline-btn" class="px-3 py-1 bg-love-50 hover:bg-love-100 text-love-600 rounded-lg text-xs font-bold border border-love-200 flex items-center gap-1 transition cursor-pointer">
+                  <i data-lucide="plus" class="w-3.5 h-3.5"></i> Add Milestone
+                </button>
+              </div>
+              <div id="timeline-container" class="space-y-3">
+                <!-- Dynamically populated milestones -->
+              </div>
+            </div>
+
+            <!-- Future Dreams section -->
+            <div class="space-y-4">
+              <div class="flex justify-between items-center">
+                <h4 class="text-sm font-bold uppercase tracking-wider text-slate-500">Future Goals & Dreams together</h4>
+                <button id="add-dream-btn" class="px-3 py-1 bg-love-50 hover:bg-love-100 text-love-600 rounded-lg text-xs font-bold border border-love-200 flex items-center gap-1 transition cursor-pointer">
+                  <i data-lucide="plus" class="w-3.5 h-3.5"></i> Add Goal
+                </button>
+              </div>
+              <div id="dreams-container" class="space-y-3">
+                <!-- Dynamically populated dreams -->
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 4: Gifts & Mini Game Questions -->
+          <div id="step-pane-4" class="step-pane space-y-6 hidden">
+            <div>
+              <h3 class="text-2xl font-serif font-black text-slate-800">Games & Surprise Gift Verification</h3>
+              <p class="text-sm text-slate-500">Create the relationship quiz and private gift box answers. The partner must answer correctly to reveal rewards!</p>
+            </div>
+
+            <!-- Couple Private Info (For Gift Box unlocking) -->
+            <div class="bg-love-50/40 p-5 rounded-2xl border border-love-100/50 space-y-4">
+              <h4 class="text-sm font-bold text-love-600 flex items-center gap-1.5"><i data-lucide="gift" class="w-4 h-4"></i> Private Gift Box Unlock Answers</h4>
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div>
+                  <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">First Date Location *</label>
+                  <input type="text" id="p-first-meet-loc" placeholder="e.g. Paris Cafe, Central Park" class="w-full px-4 py-2.5 rounded-xl glass-input text-xs">
+                </div>
+                <div>
+                  <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">Partner's Fav Color *</label>
+                  <input type="text" id="p-fav-color" placeholder="e.g. Red, Lavendar" class="w-full px-4 py-2.5 rounded-xl glass-input text-xs">
+                </div>
+                <div>
+                  <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">Partner's Fav Food *</label>
+                  <input type="text" id="p-fav-food" placeholder="e.g. Sushi, Pasta, Pizza" class="w-full px-4 py-2.5 rounded-xl glass-input text-xs">
+                </div>
+              </div>
+            </div>
+
+            <!-- Quiz Questions setup -->
+            <div class="space-y-4">
+              <div class="flex justify-between items-center">
+                <h4 class="text-sm font-bold uppercase tracking-wider text-slate-500">Love Quiz Questions (Minimum 3)</h4>
+                <button id="add-quiz-btn" class="px-3 py-1 bg-love-50 hover:bg-love-100 text-love-600 rounded-lg text-xs font-bold border border-love-200 flex items-center gap-1 transition cursor-pointer">
+                  <i data-lucide="plus" class="w-3.5 h-3.5"></i> Add Quiz Question
+                </button>
+              </div>
+              <div id="quiz-container" class="space-y-4">
+                <!-- Dynamically populated quiz cards -->
+              </div>
+            </div>
+
+            <!-- Custom Gift Boxes rewards -->
+            <div class="space-y-4">
+              <div class="flex justify-between items-center">
+                <h4 class="text-sm font-bold uppercase tracking-wider text-slate-500">Mystery Gift Boxes (Custom Rewards)</h4>
+                <button id="add-gift-btn" class="px-3 py-1 bg-love-50 hover:bg-love-100 text-love-600 rounded-lg text-xs font-bold border border-love-200 flex items-center gap-1 transition cursor-pointer">
+                  <i data-lucide="plus" class="w-3.5 h-3.5"></i> Add Custom Gift Box
+                </button>
+              </div>
+              <div id="gifts-container" class="space-y-4">
+                <!-- Dynamically populated gift blocks -->
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 5: PIN & Generate surprise link -->
+          <div id="step-pane-5" class="step-pane space-y-6 hidden">
+            <div>
+              <h3 class="text-2xl font-serif font-black text-slate-800">Secure Proposal & Generation</h3>
+              <p class="text-sm text-slate-500">Set your secret access code and build the final production-ready page URL.</p>
+            </div>
+
+            <!-- Secret PIN -->
+            <div class="max-w-xs">
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Secret 4-Digit Access PIN *</label>
+              <div class="relative">
+                <input type="text" id="p-pin" maxlength="4" placeholder="e.g. 1214" class="w-full px-4 py-3 pl-10 rounded-xl glass-input text-lg font-bold tracking-widest text-center">
+                <i data-lucide="key" class="absolute left-3.5 top-4 text-slate-400 w-4 h-4"></i>
+              </div>
+              <p class="text-xs text-slate-400 mt-2">Numbers only. Your partner must enter this PIN to unlock the surprise.</p>
+            </div>
+
+            <!-- Save project button -->
+            <button id="btn-save-project" class="px-8 py-4 bg-gradient-to-r from-love-500 to-love-600 hover:from-love-600 hover:to-love-700 text-white rounded-xl font-bold shadow-lg shadow-love-500/25 hover:shadow-love-500/40 transition cursor-pointer duration-300 transform active:scale-95 flex items-center gap-2">
+              <i data-lucide="save" class="w-5 h-5"></i> Compile & Deploy Surprise Website
+            </button>
+
+            <!-- Deployment Link details -->
+            <div id="link-reveal-section" class="hidden bg-white/60 p-6 rounded-2xl border border-love-200 space-y-5 animate-slide-up">
+              <div class="flex items-center gap-2 text-love-600 font-bold">
+                <i data-lucide="check-circle-2" class="w-6 h-6"></i>
+                <span class="text-lg">Surprise Deployed Successfully!</span>
+              </div>
+              
+              <!-- Link copier -->
+              <div class="flex items-center gap-2 bg-white rounded-xl border p-2">
+                <input type="text" id="surprise-url" readonly class="flex-1 px-3 py-1 bg-transparent border-0 text-sm font-semibold focus:outline-none overflow-x-auto text-slate-700 select-all">
+                <button id="btn-copy-url" class="px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-lg text-xs font-bold transition flex items-center gap-1 cursor-pointer">
+                  <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copy Link
+                </button>
+              </div>
+
+              <!-- Share buttons & QR Code -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-4">
+                <div class="space-y-3">
+                  <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400">Share Directly</h4>
+                  <div class="flex gap-2">
+                    <a id="share-whatsapp" target="_blank" class="flex-1 py-2.5 bg-[#25D366] hover:bg-[#20ba5a] text-white rounded-xl font-bold text-center text-xs transition flex justify-center items-center gap-1.5">
+                      WhatsApp
+                    </a>
+                    <a id="share-facebook" target="_blank" class="flex-1 py-2.5 bg-[#1877F2] hover:bg-[#1565cf] text-white rounded-xl font-bold text-center text-xs transition flex justify-center items-center gap-1.5">
+                      Facebook
+                    </a>
+                  </div>
+                </div>
+                <div class="flex flex-col items-center justify-center p-4 bg-white rounded-2xl border border-slate-100">
+                  <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Scan QR Code</h4>
+                  <div id="qr-code-canvas" class="w-32 h-32 bg-slate-100 flex items-center justify-center rounded-lg border border-slate-200">
+                    <!-- QR code image loaded here -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Wizard Navigation Buttons -->
+          <div class="flex justify-between items-center border-t border-love-100 pt-6 mt-8">
+            <button id="btn-prev" class="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-bold text-sm transition flex items-center gap-1.5 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed">
+              <i data-lucide="arrow-left" class="w-4 h-4"></i> Previous Step
+            </button>
+            <button id="btn-next" class="px-5 py-2.5 bg-love-500 hover:bg-love-600 text-white rounded-xl font-bold text-sm transition flex items-center gap-1.5 cursor-pointer">
+              Next Step <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- TABS: 2B. RESPONSES & USER INTERACTIONS -->
+      <div id="responses-container" class="hidden grid grid-cols-1 lg:grid-cols-4 gap-6 animate-slide-up">
+        
+        <!-- Sidebar Navigation for Activity tabs -->
+        <div class="glass-panel p-6 rounded-3xl h-fit space-y-2 lg:col-span-1 border">
+          <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 px-3 mb-4">Partner Feed</h3>
+          <nav class="space-y-1">
+            <button id="resp-tab-images" class="w-full text-left px-4 py-3 rounded-xl font-bold text-sm flex items-center gap-3 transition cursor-pointer bg-love-500 text-white shadow-md shadow-love-500/10">
+              <i data-lucide="camera" class="w-4 h-4"></i> Received Images
+            </button>
+            <button id="resp-tab-replies" class="w-full text-left px-4 py-3 rounded-xl font-semibold text-sm flex items-center gap-3 transition cursor-pointer hover:bg-love-50 text-slate-600 hover:text-love-500">
+              <i data-lucide="message-circle-heart" class="w-4 h-4"></i> Reactions & Comments
+            </button>
+            <button id="resp-tab-feedback" class="w-full text-left px-4 py-3 rounded-xl font-semibold text-sm flex items-center gap-3 transition cursor-pointer hover:bg-love-50 text-slate-600 hover:text-love-500">
+              <i data-lucide="mail-open" class="w-4 h-4"></i> Final Feedback
+            </button>
+          </nav>
+        </div>
+
+        <!-- Responses Content Viewer -->
+        <div class="lg:col-span-3 glass-panel p-8 rounded-3xl shadow-xl border min-h-[400px]">
+          
+          <!-- Tab Panel: Received Images -->
+          <div id="panel-resp-images" class="panel-resp space-y-6">
+            <div class="flex justify-between items-center border-b pb-4">
+              <div>
+                <h3 class="text-2xl font-serif font-black text-slate-800">Received Images folder</h3>
+                <p class="text-sm text-slate-500">Snapshots taken by your partner during the webcam mirror surprise scene.</p>
+              </div>
+              <button id="btn-refresh-images" class="p-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-full cursor-pointer transition">
+                <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+              </button>
+            </div>
+            
+            <div id="received-images-gallery" class="grid grid-cols-2 md:grid-cols-3 gap-6">
+              <!-- Dynamically populated snapshots -->
+              <div class="col-span-full py-12 text-center text-slate-400">
+                <i data-lucide="image" class="w-12 h-12 mx-auto mb-2 text-slate-300"></i>
+                <p class="text-sm font-semibold">No pictures received yet.</p>
+                <p class="text-xs">Once your partner allows webcam and captures a smile, it will show up here!</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tab Panel: Reactions & Replies -->
+          <div id="panel-resp-replies" class="panel-resp space-y-6 hidden">
+            <div class="flex justify-between items-center border-b pb-4">
+              <div>
+                <h3 class="text-2xl font-serif font-black text-slate-800">Reactions & Comments</h3>
+                <p class="text-sm text-slate-500">Emoji reactions and replies your partner left on your photo cards and messages.</p>
+              </div>
+              <button id="btn-refresh-replies" class="p-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-full cursor-pointer transition">
+                <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+              </button>
+            </div>
+
+            <div id="received-replies-feed" class="space-y-4">
+              <!-- Dynamically populated comments timeline -->
+              <div class="py-12 text-center text-slate-400">
+                <i data-lucide="message-square" class="w-12 h-12 mx-auto mb-2 text-slate-300"></i>
+                <p class="text-sm font-semibold">No comments or emoji reactions yet.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tab Panel: Final Feedback Letters -->
+          <div id="panel-resp-feedback" class="panel-resp space-y-6 hidden">
+            <div class="flex justify-between items-center border-b pb-4">
+              <div>
+                <h3 class="text-2xl font-serif font-black text-slate-800">Final Letters received</h3>
+                <p class="text-sm text-slate-500">Personal letters your partner wrote to you in the final feedback section at the end of the proposal.</p>
+              </div>
+              <button id="btn-refresh-feedback" class="p-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-full cursor-pointer transition">
+                <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+              </button>
+            </div>
+
+            <div id="received-feedback-feed" class="space-y-4">
+              <!-- Dynamically populated feedback cards -->
+              <div class="py-12 text-center text-slate-400">
+                <i data-lucide="heart-handshake" class="w-12 h-12 mx-auto mb-2 text-slate-300"></i>
+                <p class="text-sm font-semibold">No feedback submitted yet.</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Mobile Drawer Overlay for Steps of Love -->
+  <div id="mobile-steps-drawer" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 transition-opacity duration-300 opacity-0 pointer-events-none">
+    <div class="fixed top-0 left-0 bottom-0 w-72 bg-white/95 backdrop-blur-md shadow-2xl p-6 flex flex-col gap-4 border-r border-love-100 transform -translate-x-full transition-transform duration-300" id="mobile-drawer-body">
+      <div class="flex justify-between items-center border-b border-love-100 pb-3">
+        <span class="text-love-600 font-bold font-serif text-lg flex items-center gap-1.5"><i data-lucide="heart" class="w-5 h-5 fill-love-500 text-love-500 animate-heartbeat"></i> Steps of Love</span>
+        <button id="btn-close-drawer" type="button" class="p-1.5 hover:bg-love-50 text-slate-400 hover:text-love-500 rounded-lg transition cursor-pointer">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <nav class="space-y-2 flex-1 overflow-y-auto" id="mobile-drawer-nav">
+        <button data-step="1" class="mobile-drawer-step-btn w-full text-left px-4 py-3 rounded-xl font-bold text-sm flex items-center gap-3 transition cursor-pointer bg-love-500 text-white shadow-md shadow-love-500/10">
+          <span class="w-6 h-6 rounded-full bg-white/20 text-white flex items-center justify-center text-xs">1</span> Partner Profile
+        </button>
+        <button data-step="2" class="mobile-drawer-step-btn w-full text-left px-4 py-3 rounded-xl font-semibold text-sm flex items-center gap-3 transition cursor-pointer hover:bg-love-50 text-slate-600 hover:text-love-500">
+          <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-xs">2</span> Photo Gallery
+        </button>
+        <button data-step="3" class="mobile-drawer-step-btn w-full text-left px-4 py-3 rounded-xl font-semibold text-sm flex items-center gap-3 transition cursor-pointer hover:bg-love-50 text-slate-600 hover:text-love-500">
+          <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-xs">3</span> Love Journey
+        </button>
+        <button data-step="4" class="mobile-drawer-step-btn w-full text-left px-4 py-3 rounded-xl font-semibold text-sm flex items-center gap-3 transition cursor-pointer hover:bg-love-50 text-slate-600 hover:text-love-500">
+          <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-xs">4</span> Gifts & Trivia
+        </button>
+        <button data-step="5" class="mobile-drawer-step-btn w-full text-left px-4 py-3 rounded-xl font-semibold text-sm flex items-center gap-3 transition cursor-pointer hover:bg-love-50 text-slate-600 hover:text-love-500">
+          <span class="w-6 h-6 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-xs">5</span> PIN & Link
+        </button>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Global toast messages system -->
+  <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-3"></div>
+
+  <!-- Lucide Icons Script -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Supabase client CDN fallback in case module resolution needs standard setup -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script type="module" src="/src/app.js"></script>
+</body>
+</html>

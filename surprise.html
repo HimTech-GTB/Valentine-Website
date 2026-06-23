@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A Special Surprise For You ❤️</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💖</text></svg>">
+  <link rel="stylesheet" href="/src/style.css">
+</head>
+<body class="bg-romantic-grid min-h-screen text-slate-800 font-sans antialiased overflow-x-hidden relative">
+
+  <!-- Background Music Loop (Controlled by user volume/mute only) -->
+  <audio id="romantic-music" loop preload="auto">
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- Ambient Hearts Canvas -->
+  <div id="particles-container" class="absolute inset-0 pointer-events-none z-0 overflow-hidden"></div>
+
+  <!-- Music Control Button Floating -->
+  <div class="fixed top-6 right-6 z-50 flex items-center gap-2">
+    <button id="btn-music-toggle" class="p-3 bg-white/60 hover:bg-white text-love-500 rounded-full shadow-lg border border-love-100 backdrop-blur-md transition cursor-pointer flex items-center justify-center transform active:scale-90">
+      <i data-lucide="music-4" class="w-5 h-5"></i>
+    </button>
+    <div id="music-volume-panel" class="bg-white/60 px-3 py-1.5 rounded-full border border-love-100 backdrop-blur-md shadow-lg hidden items-center gap-1.5">
+      <i data-lucide="volume-1" class="w-3.5 h-3.5 text-love-500"></i>
+      <input type="range" id="music-volume" min="0" max="1" step="0.1" value="0.5" class="w-16 accent-love-500 h-1.5 rounded-lg appearance-none cursor-pointer bg-love-100">
+    </div>
+  </div>
+
+  <!-- ==================== SCENE 1: SECURE PIN LOCK ==================== -->
+  <div id="lock-screen" class="fixed inset-0 bg-romantic-grid z-40 flex items-center justify-center p-4">
+    <div class="w-full max-w-md glass-panel rounded-3xl shadow-2xl p-8 text-center border relative overflow-hidden animate-fade-in">
+      <div class="absolute -top-12 -left-12 w-24 h-24 bg-love-200/30 rounded-full blur-xl"></div>
+      <div class="absolute -bottom-12 -right-12 w-24 h-24 bg-love-300/30 rounded-full blur-xl"></div>
+
+      <div class="w-16 h-16 bg-love-50 rounded-full flex items-center justify-center mx-auto mb-4 animate-heartbeat">
+        <i data-lucide="lock" class="w-8 h-8 text-love-500 fill-love-50"></i>
+      </div>
+
+      <h2 class="text-3xl font-serif font-black text-slate-800 mb-2">Our Secret PIN ❤️</h2>
+      <p class="text-sm text-slate-500 mb-6">Please enter the 4-digit code to unlock your Valentine's surprise.</p>
+
+      <!-- Pin input -->
+      <div class="flex justify-center gap-3 mb-6" id="pin-inputs-container">
+        <input type="password" maxlength="1" class="pin-box w-12 h-14 text-center text-2xl font-bold rounded-xl glass-input outline-none focus:ring-2 focus:ring-love-500 transition">
+        <input type="password" maxlength="1" class="pin-box w-12 h-14 text-center text-2xl font-bold rounded-xl glass-input outline-none focus:ring-2 focus:ring-love-500 transition">
+        <input type="password" maxlength="1" class="pin-box w-12 h-14 text-center text-2xl font-bold rounded-xl glass-input outline-none focus:ring-2 focus:ring-love-500 transition">
+        <input type="password" maxlength="1" class="pin-box w-12 h-14 text-center text-2xl font-bold rounded-xl glass-input outline-none focus:ring-2 focus:ring-love-500 transition">
+      </div>
+
+      <!-- Playful error text -->
+      <p id="pin-feedback" class="text-xs font-semibold text-love-500 min-h-[1.5rem]"></p>
+    </div>
+  </div>
+
+  <!-- ==================== RECEIVER MAIN CONTAINER ==================== -->
+  <main id="surprise-content" class="hidden max-w-4xl mx-auto px-4 py-12 space-y-16 relative z-10">
+
+    <!-- ==================== SCENE 2: WELCOME PROPOSAL GAME ==================== -->
+    <section id="scene-proposal" class="min-h-[80vh] flex flex-col items-center justify-center text-center space-y-8 py-12">
+      <div class="glass-panel p-8 sm:p-12 rounded-3xl shadow-xl border w-full max-w-2xl space-y-6 relative overflow-hidden animate-slide-up">
+        
+        <div class="text-love-500 text-6xl font-cursive">Will You Be My Valentine?</div>
+        
+        <h1 id="proposal-partner-title" class="text-4xl sm:text-5xl font-serif font-black text-slate-800 leading-tight">
+          Will You Be My Valentine, <span id="partner-display-name" class="text-love-500">Sarah</span>? ❤️
+        </h1>
+        
+        <p id="proposal-custom-msg" class="text-slate-600 font-medium max-w-md mx-auto">
+          Every moment with you is a dream. I made this surprise just for you.
+        </p>
+
+        <!-- Buttons -->
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-6 pt-6 min-h-[120px] relative" id="proposal-btns-container">
+          <button id="btn-yes" class="px-10 py-4 bg-gradient-to-r from-love-500 to-love-600 hover:from-love-600 hover:to-love-700 text-white rounded-2xl font-bold text-lg shadow-lg shadow-love-500/25 hover:shadow-love-500/40 transition duration-300 transform active:scale-95 cursor-pointer z-10 flex items-center gap-2">
+            YES! ❤️
+          </button>
+          <button id="btn-no" class="px-8 py-3.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-2xl font-semibold text-base transition-all duration-300 cursor-pointer absolute sm:relative">
+            No 😘
+          </button>
+        </div>
+
+        <p id="flirty-no-msg" class="text-sm font-semibold text-love-500 min-h-[1.5rem] mt-4"></p>
+      </div>
+    </section>
+
+    <!-- ==================== EXPERIENTIAL SECTIONS (UNLOCKED AFTER YES) ==================== -->
+    <div id="unlocked-surprise" class="hidden space-y-16">
+
+      <!-- ==================== SCENE 3: MAGIC MIRROR CAMERA SNAPSHOT ==================== -->
+      <section id="scene-mirror" class="glass-panel rounded-3xl shadow-xl p-8 border text-center space-y-6">
+        <h3 class="text-3xl font-serif font-black text-slate-800">Our Magic Mirror ✨</h3>
+        <p class="text-sm text-slate-500 max-w-md mx-auto">Click below to activate the mirror, give me your cutest smile, and take a quick snapshot to save in my memories directory!</p>
+
+        <div class="relative w-72 h-72 mx-auto flex items-center justify-center">
+          <!-- Elegant Gold Mirror Heart Frame -->
+          <div class="absolute inset-0 rounded-full border-8 border-gold-500 shadow-lg shadow-gold-500/20 z-10 pointer-events-none animate-sparkle"></div>
+          
+          <div class="w-full h-full rounded-full overflow-hidden bg-slate-900 relative">
+            <!-- Video feed -->
+            <video id="mirror-video" autoplay playsinline muted class="w-full h-full object-cover scale-x-[-1]"></video>
+            <!-- Overlay Canvas for screenshot -->
+            <canvas id="mirror-canvas" class="hidden absolute inset-0 w-full h-full"></canvas>
+            
+            <!-- Fallback camera blocked state -->
+            <div id="mirror-fallback" class="absolute inset-0 bg-love-900/10 backdrop-blur-sm flex flex-col items-center justify-center p-4 text-center text-slate-300 hidden">
+              <i data-lucide="camera-off" class="w-10 h-10 text-love-400 mb-2"></i>
+              <p class="text-xs font-semibold">Camera Access Blocked or Unavailable.</p>
+              <button id="btn-mirror-retry" class="mt-2 px-3 py-1 bg-white/20 hover:bg-white/30 text-white rounded-lg text-xs font-bold transition">Enable Camera</button>
+            </div>
+
+            <!-- Loader -->
+            <div id="mirror-loader" class="absolute inset-0 bg-slate-950 flex flex-col items-center justify-center text-slate-400">
+              <i data-lucide="loader-2" class="w-8 h-8 animate-spin text-love-500"></i>
+              <span class="text-xs mt-2">Connecting mirror...</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex justify-center gap-4">
+          <button id="btn-capture" class="px-6 py-3 bg-gradient-to-r from-gold-500 to-gold-600 hover:from-gold-600 hover:to-gold-700 text-slate-900 rounded-xl font-bold shadow-lg shadow-gold-500/20 transition cursor-pointer flex items-center gap-1.5">
+            <i data-lucide="camera" class="w-4 h-4"></i> Snap My Smile ❤️
+          </button>
+        </div>
+      </section>
+
+      <!-- ==================== SCENE 4: MEMORY GALLERY & SLIDESHOW ==================== -->
+      <section id="scene-gallery" class="space-y-6">
+        <div class="text-center">
+          <h3 class="text-3xl font-serif font-black text-slate-800">Our Photo Slideshow</h3>
+          <p class="text-sm text-slate-500">A collection of our most cherished moments. Click the hearts to react or leave a comment!</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+          <!-- Slideshow Card -->
+          <div class="glass-panel p-4 rounded-3xl shadow-xl border relative">
+            <div class="aspect-square w-full rounded-2xl overflow-hidden bg-slate-100 relative group">
+              <img id="gallery-slide-img" src="" class="w-full h-full object-cover transition-opacity duration-500 opacity-0">
+              
+              <!-- Floating Emoji Reactions left by partner (shown at corner) -->
+              <div id="slide-reaction-badge" class="absolute top-4 left-4 bg-white/95 px-3 py-1.5 rounded-full shadow-lg border text-sm font-bold flex items-center gap-1 transition-all scale-0">
+                <!-- Emojis populated dynamically -->
+              </div>
+            </div>
+
+            <div class="p-4 space-y-4">
+              <p id="gallery-slide-caption" class="text-sm text-slate-600 italic font-semibold text-center"></p>
+              
+              <!-- Slider Indicator Dots -->
+              <div class="flex justify-center gap-1.5" id="gallery-dots">
+                <!-- Dot elements dynamic -->
+              </div>
+
+              <!-- Reactions & comments on this photo -->
+              <div class="border-t border-love-100 pt-4 space-y-3">
+                <!-- Emojis reaction toolbar -->
+                <div class="flex items-center justify-center gap-3">
+                  <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">React:</span>
+                  <div class="flex gap-1.5" id="gallery-reaction-btns">
+                    <button data-emoji="❤️" class="reaction-emoji-btn text-2xl hover:scale-125 transition active:scale-95 cursor-pointer">❤️</button>
+                    <button data-emoji="😍" class="reaction-emoji-btn text-2xl hover:scale-125 transition active:scale-95 cursor-pointer">😍</button>
+                    <button data-emoji="😘" class="reaction-emoji-btn text-2xl hover:scale-125 transition active:scale-95 cursor-pointer">😘</button>
+                    <button data-emoji="🥰" class="reaction-emoji-btn text-2xl hover:scale-125 transition active:scale-95 cursor-pointer">🥰</button>
+                    <button data-emoji="💖" class="reaction-emoji-btn text-2xl hover:scale-125 transition active:scale-95 cursor-pointer">💖</button>
+                  </div>
+                </div>
+
+                <!-- Text comment reply -->
+                <div class="flex gap-2">
+                  <input type="text" id="gallery-comment-input" placeholder="Write a reply..." class="flex-1 px-3 py-2 text-xs rounded-xl glass-input">
+                  <button id="btn-gallery-comment-submit" class="px-4 py-2 bg-love-500 hover:bg-love-600 text-white rounded-xl text-xs font-bold transition cursor-pointer">Reply</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Description and custom Love Cards list -->
+          <div class="space-y-4" id="love-cards-list-container">
+            <!-- Populated dynamically with creator messages, partner can react/reply to each -->
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== SCENE 5: LOVE JOURNEY TIMELINE ==================== -->
+      <section id="scene-timeline" class="space-y-8">
+        <div class="text-center">
+          <h3 class="text-3xl font-serif font-black text-slate-800">Our Timeline Journey</h3>
+          <p class="text-sm text-slate-500">Every single date, anniversary, and milestone that makes us who we are.</p>
+        </div>
+
+        <div class="relative pl-6 border-l-2 border-love-200 ml-4 md:ml-8 space-y-8" id="timeline-scroll-feed">
+          <!-- Timelines populated dynamically -->
+        </div>
+      </section>
+
+      <!-- ==================== SCENE 6: SURPRISE GIFT BOXES ==================== -->
+      <section id="scene-gifts" class="space-y-8">
+        <div class="text-center">
+          <h3 class="text-3xl font-serif font-black text-slate-800">Mystery Gift Boxes 🎁</h3>
+          <p class="text-sm text-slate-500">Answer relationship trivia questions to open each mystery box and reveal hidden letters or photos.</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6" id="gift-boxes-grid">
+          <!-- Gift boxes populated dynamically -->
+        </div>
+      </section>
+
+      <!-- ==================== SCENE 7: ROMANTIC MINI GAMES ==================== -->
+      <section id="scene-games" class="space-y-8">
+        <div class="text-center">
+          <h3 class="text-3xl font-serif font-black text-slate-800">Our Mini Games 🎮</h3>
+          <p class="text-sm text-slate-500">Play these romantic games to test our connection and reveal custom animations!</p>
+        </div>
+
+        <!-- Games selector tabs -->
+        <div class="flex justify-center border-b max-w-md mx-auto mb-6">
+          <button id="game-tab-catch" class="flex-1 pb-2.5 text-center font-bold text-love-500 border-b-2 border-love-500 cursor-pointer text-xs uppercase tracking-wider transition">Heart Catch</button>
+          <button id="game-tab-quiz" class="flex-1 pb-2.5 text-center font-semibold text-slate-400 hover:text-love-400 cursor-pointer text-xs uppercase tracking-wider transition">Love Quiz</button>
+          <button id="game-tab-match" class="flex-1 pb-2.5 text-center font-semibold text-slate-400 hover:text-love-400 cursor-pointer text-xs uppercase tracking-wider transition">Memory Match</button>
+        </div>
+
+        <!-- Game Card Wrapper -->
+        <div class="glass-panel p-6 sm:p-8 rounded-3xl border shadow-xl max-w-lg mx-auto min-h-[360px] flex items-center justify-center">
+          
+          <!-- GAME 1: Heart Catch Canvas -->
+          <div id="game-pane-catch" class="game-pane w-full space-y-4">
+            <div class="text-center">
+              <h4 class="text-lg font-bold text-slate-800">Heart Catch Game</h4>
+              <p class="text-xs text-slate-400">Move your cursor/finger to catch falling hearts and hit a score of 15!</p>
+            </div>
+            <div class="relative w-full aspect-video bg-slate-950 rounded-2xl overflow-hidden border">
+              <canvas id="heart-catch-canvas" class="w-full h-full block"></canvas>
+              <!-- Game overlays -->
+              <div id="game-catch-overlay" class="absolute inset-0 bg-black/70 flex flex-col items-center justify-center text-center p-4">
+                <i data-lucide="play-circle" class="w-12 h-12 text-love-500 mb-2 animate-pulse cursor-pointer" id="btn-start-catch"></i>
+                <p class="text-white font-bold text-sm">Start Catching Hearts</p>
+                <p class="text-xs text-slate-400">Use Mouse or Touch to move the basket</p>
+              </div>
+            </div>
+            <div class="flex justify-between items-center text-xs font-bold text-slate-600 px-1">
+              <span>Score: <span id="catch-score">0</span>/15</span>
+              <span id="catch-high-score-msg" class="text-love-500 hidden">You matched! Reward unlocked! 💖</span>
+            </div>
+          </div>
+
+          <!-- GAME 2: Love Quiz -->
+          <div id="game-pane-quiz" class="game-pane w-full hidden space-y-6">
+            <div class="text-center">
+              <h4 class="text-lg font-bold text-slate-800">Relationship Trivia</h4>
+              <p class="text-xs text-slate-400">Prove how well you remember our memories together!</p>
+            </div>
+            <div id="quiz-question-box" class="space-y-4">
+              <!-- Dynamically populated question details -->
+            </div>
+            <div class="flex justify-between text-xs font-semibold text-slate-400">
+              <span>Question <span id="quiz-curr-idx">1</span> of <span id="quiz-total-cnt">3</span></span>
+              <span>Score: <span id="quiz-score">0</span></span>
+            </div>
+          </div>
+
+          <!-- GAME 3: Memory Match -->
+          <div id="game-pane-match" class="game-pane w-full hidden space-y-4">
+            <div class="text-center">
+              <h4 class="text-lg font-bold text-slate-800">Couple Card Match</h4>
+              <p class="text-xs text-slate-400">Click cards to flip and match the couple icons!</p>
+            </div>
+            <div class="grid grid-cols-4 gap-3 max-w-sm mx-auto" id="memory-cards-grid">
+              <!-- 4x4 or 3x4 grid dynamic cards -->
+            </div>
+            <div class="text-center text-xs font-bold text-love-500 hidden" id="memory-match-win-msg">
+              Perfect Match! You remember our love! 💖
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ==================== SCENE 8: CINEMATIC LOVE LETTER REVEAL ==================== -->
+      <section id="scene-envelope" class="flex flex-col items-center justify-center py-12">
+        <div class="text-center mb-8">
+          <h3 class="text-3xl font-serif font-black text-slate-800">My Letter To You ✉️</h3>
+          <p class="text-sm text-slate-500">A special handwritten note sealed with love. Click to break the wax seal and open.</p>
+        </div>
+
+        <!-- Envelope structure -->
+        <div class="relative w-80 h-52 bg-rose-200 rounded-b-2xl shadow-2xl border border-rose-300 flex items-center justify-center cursor-pointer transition transform hover:scale-105 active:scale-95" id="envelope-wrapper">
+          <!-- Envelope flap -->
+          <div class="absolute -top-[104px] left-0 w-0 h-0 border-l-[160px] border-l-transparent border-r-[160px] border-r-transparent border-b-[104px] border-b-rose-200 origin-bottom transition duration-500 z-20" id="envelope-flap"></div>
+          
+          <!-- Sealed heart wax stamp -->
+          <div class="absolute top-[80px] z-30 w-12 h-12 bg-love-600 hover:bg-love-700 rounded-full flex items-center justify-center border border-love-700 shadow-md text-white text-lg transition duration-300" id="envelope-wax-seal">
+            ❤️
+          </div>
+
+          <!-- Paper letter coming out -->
+          <div class="absolute w-[280px] h-[160px] bg-amber-50 rounded-lg p-6 shadow-inner border border-amber-100 z-10 transition-all duration-500 top-2 overflow-y-auto flex flex-col justify-between" id="envelope-letter">
+            <div class="text-center text-love-600 font-cursive text-2xl border-b pb-2 mb-2">My Dearest...</div>
+            <p id="love-letter-display-body" class="text-xs leading-relaxed font-serif text-slate-700 italic whitespace-pre-line"></p>
+            <div class="text-right text-xs font-bold text-love-600 mt-4 border-t pt-2">— Yours Forever ❤️</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== SCENE 9: COUNTDOWN SECTION ==================== -->
+      <section id="scene-countdown" class="glass-panel rounded-3xl shadow-xl p-8 border text-center space-y-6">
+        <h3 class="text-3xl font-serif font-black text-slate-800">Time We've Spent Together</h3>
+        <p class="text-sm text-slate-500">Every second counts when I am with you.</p>
+
+        <!-- Countdown timer -->
+        <div class="grid grid-cols-3 gap-4 max-w-sm mx-auto">
+          <div class="bg-white/60 p-4 rounded-2xl border border-love-100 shadow-sm flex flex-col items-center">
+            <span id="timer-days" class="text-3xl sm:text-4xl font-serif font-black text-love-600">0</span>
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider mt-1">Days</span>
+          </div>
+          <div class="bg-white/60 p-4 rounded-2xl border border-love-100 shadow-sm flex flex-col items-center">
+            <span id="timer-hours" class="text-3xl sm:text-4xl font-serif font-black text-love-600">0</span>
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider mt-1">Hours</span>
+          </div>
+          <div class="bg-white/60 p-4 rounded-2xl border border-love-100 shadow-sm flex flex-col items-center">
+            <span id="timer-minutes" class="text-3xl sm:text-4xl font-serif font-black text-love-600">0</span>
+            <span class="text-xs font-bold text-slate-400 uppercase tracking-wider mt-1">Minutes</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== SCENE 10: FUTURE DREAMS SECTION ==================== -->
+      <section id="scene-dreams" class="space-y-6">
+        <div class="text-center">
+          <h3 class="text-3xl font-serif font-black text-slate-800">Our Future Dreams</h3>
+          <p class="text-sm text-slate-500 font-medium">All the adventures, plans, and moments we have yet to build together.</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6" id="dreams-grid-feed">
+          <!-- Dynamic Future Dreams cards -->
+        </div>
+      </section>
+
+      <!-- ==================== SCENE 11: FINAL PROPOSAL STAGE ==================== -->
+      <section id="scene-final" class="min-h-[85vh] flex flex-col items-center justify-center text-center space-y-8 relative overflow-hidden py-12">
+        <!-- Canvas for full-screen fireworks -->
+        <canvas id="fireworks-canvas" class="absolute inset-0 pointer-events-none z-0"></canvas>
+
+        <div class="glass-panel p-8 sm:p-12 rounded-3xl shadow-2xl border w-full max-w-2xl space-y-6 relative z-10 animate-glow">
+          <div class="text-love-500 text-7xl font-cursive">I Love You Forever ❤️</div>
+          
+          <h2 class="text-3xl sm:text-4xl font-serif font-black text-slate-800 leading-tight">
+            Will You Stay With Me Forever?
+          </h2>
+          
+          <p class="text-slate-600 font-medium max-w-md mx-auto">
+            You are my heart, my soul, my today, and all of my tomorrows.
+          </p>
+
+          <button id="btn-final-confirm" class="px-12 py-5 bg-gradient-to-r from-love-500 to-love-600 hover:from-love-600 hover:to-love-700 text-white rounded-2xl font-bold text-xl shadow-lg shadow-love-500/25 hover:shadow-love-500/40 transition duration-300 transform active:scale-95 cursor-pointer animate-heartbeat flex items-center justify-center gap-2 mx-auto">
+            <i data-lucide="check" class="w-6 h-6"></i> YES, I Promise! ❤️
+          </button>
+        </div>
+      </section>
+
+      <!-- ==================== SCENE 12: FEEDBACK & WRITE BACK ==================== -->
+      <section id="scene-feedback" class="glass-panel rounded-3xl shadow-xl p-8 border text-center space-y-6 max-w-xl mx-auto">
+        <h3 class="text-2xl font-serif font-black text-slate-800 flex justify-center items-center gap-2">
+          Wanna write something to me? <i data-lucide="heart" class="text-love-500 fill-love-500 w-5 h-5"></i>
+        </h3>
+        <p class="text-sm text-slate-500">Submit a letter, sweet words, or feedback directly to my dashboard directory.</p>
+
+        <textarea id="feedback-message-input" rows="4" placeholder="Write your letter here, my love..." class="w-full px-4 py-3 rounded-2xl glass-input text-sm font-medium"></textarea>
+
+        <button id="btn-feedback-submit" class="px-8 py-3 bg-gradient-to-r from-love-500 to-love-600 hover:from-love-600 hover:to-love-700 text-white rounded-xl font-bold shadow-lg transition transform active:scale-95 cursor-pointer flex items-center gap-1.5 mx-auto">
+          <i data-lucide="send" class="w-4 h-4"></i> Send Letter
+        </button>
+      </section>
+
+    </div>
+
+  </main>
+
+  <!-- ==================== FLOATING BOTTOM CTA (WANT TO CREATE ONE?) ==================== -->
+  <div class="w-full flex justify-center py-8 relative z-30">
+    <a href="/" class="glass-panel px-5 py-2.5 rounded-full shadow-lg border border-love-200 text-xs font-bold text-love-600 hover:text-love-700 hover:bg-love-50 transition flex items-center gap-1.5 transform hover:scale-105">
+      <i data-lucide="heart" class="w-4 h-4 fill-love-100"></i> Want to create a surprise for someone? ❤️
+    </a>
+  </div>
+
+  <!-- Toast notification system -->
+  <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-3"></div>
+
+  <!-- Lucide Icons Script -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Supabase client CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script type="module" src="/src/surprise.js"></script>
+</body>
+</html>
