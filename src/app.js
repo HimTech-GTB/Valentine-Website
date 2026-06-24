@@ -426,7 +426,6 @@ function resetWizardFields() {
   document.getElementById("p-nickname").value = "";
   document.getElementById("p-title").value = "";
   document.getElementById("p-message").value = "";
-  document.getElementById("p-music").value = "";
   document.getElementById("p-countdown-date").value = "";
   document.getElementById("p-first-meet-date").value = "";
   document.getElementById("p-love-letter").value = "";
@@ -494,7 +493,6 @@ function populateWizardData(proj) {
   document.getElementById("p-nickname").value = proj.nickname || "";
   document.getElementById("p-title").value = proj.proposal_title || "";
   document.getElementById("p-message").value = proj.proposal_message || "";
-  document.getElementById("p-music").value = proj.music_url || "";
   
   if (proj.countdown_date) {
     document.getElementById("p-countdown-date").value = proj.countdown_date.split("T")[0];
@@ -1015,7 +1013,7 @@ async function saveProposalConfig() {
   const nickname = document.getElementById("p-nickname").value.trim();
   const pTitle = document.getElementById("p-title").value.trim();
   const pMsg = document.getElementById("p-message").value.trim();
-  const pMusic = document.getElementById("p-music").value.trim();
+  const pMusic = "";
   const pCountdown = document.getElementById("p-countdown-date").value;
   const pFirstMeet = document.getElementById("p-first-meet-date").value;
   const pLetter = document.getElementById("p-love-letter").value.trim();
