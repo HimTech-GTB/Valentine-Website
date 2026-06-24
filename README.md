@@ -1,6 +1,13 @@
-# Eternal Love - Multi-Tenant Valentine's Proposal Web Application
+# 💖 Eternal Love — Valentine's Proposal Web App
 
-A premium, full-stack, multi-tenant Valentine's Day surprise creation platform. Users can create a gorgeous, secure, custom proposal site for their partners with galleries, games, mystery gift boxes, love letters, and countdowns. 
+![License](https://img.shields.io/badge/license-MIT-pink?style=flat-square)
+![Built with Vite](https://img.shields.io/badge/built%20with-Vite-646cff?style=flat-square&logo=vite)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-v4-38bdf8?style=flat-square&logo=tailwindcss)
+![Supabase](https://img.shields.io/badge/backend-Supabase-3ecf8e?style=flat-square&logo=supabase)
+
+A premium, full-stack, multi-tenant Valentine's Day surprise creation platform. Users can create a gorgeous, secure, custom proposal site for their partners with galleries, games, mystery gift boxes, love letters, and countdowns.
+
+> 🔗 **Live Demo**: [your-site.netlify.app](https://your-site.netlify.app) ← replace with your link after deployment
 
 This project uses **Vite**, **Vanilla JavaScript**, **Tailwind CSS v4**, and **Supabase** (Auth, Postgres RLS, and Storage).
 
@@ -117,3 +124,25 @@ You can host this project on **Vercel**, **Netlify**, or **GitHub Pages**.
    - **Output Directory**: `dist`
 3. Add your Environment Variables (`VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`) in the host settings panel.
 4. Deploy!
+
+---
+
+## 🤝 Contributing
+
+This is a personal project, but feel free to fork it and customize it for your own romantic surprise! Pull requests are welcome for bug fixes.
+
+1. Fork the repo
+2. Create your feature branch: `git checkout -b fix/my-fix`
+3. Commit your changes: `git commit -m 'Fix: description'`
+4. Push to the branch: `git push origin fix/my-fix`
+5. Open a Pull Request
+
+---
+
+## 📜 License
+
+This project is licensed under the **MIT License** — see the [LICENSE](./LICENSE) file for details.
+
+---
+
+<p align="center">Made with ❤️ for someone special</p>
