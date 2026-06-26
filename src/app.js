@@ -24,6 +24,7 @@ const tabRegister = document.getElementById("tab-register");
 const loginForm = document.getElementById("login-form");
 const registerForm = document.getElementById("register-form");
 const googleAuthBtn = document.getElementById("google-auth-btn");
+const guestAuthBtn = document.getElementById("guest-auth-btn");
 
 // Wizard Navigation
 const btnPrev = document.getElementById("btn-prev");
@@ -83,6 +84,7 @@ window.addEventListener("DOMContentLoaded", async () => {
   
   // Try to setup Supabase
   await initBackend();
+  await handleOAuthCallback();
   checkSession();
   
   // Initialize Lucide Icons
@@ -145,11 +147,27 @@ function showToast(message, type = "success") {
 
 // Backend Init: Supabase or Local Mock Sandbox
 async function initBackend() {
+  // #region agent log
+  fetch('http://127.0.0.1:7279/ingest/9413dc50-3da9-4e3a-bc0f-a566f606853d',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'57b405'},body:JSON.stringify({sessionId:'57b405',location:'app.js:initBackend',message:'Backend init start',data:{hasEnv:!!(ENV_URL&&ENV_KEY),hasSupabaseGlobal:!!window.supabase?.createClient,hasSavedConfig:!!localStorage.getItem('supabase_config')},timestamp:Date.now(),hypothesisId:'B'})}).catch(()=>{});
+  // #endregion
+
+  if (!window.supabase?.createClient) {
+    isDemoMode = true;
+    console.warn("Supabase SDK not loaded. Operating in Demo/Sandbox Mock mode.");
+    // #region agent log
+    fetch('http://127.0.0.1:7279/ingest/9413dc50-3da9-4e3a-bc0f-a566f606853d',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'57b405'},body:JSON.stringify({sessionId:'57b405',location:'app.js:initBackend',message:'Supabase SDK missing, demo mode forced',data:{isDemoMode:true},timestamp:Date.now(),hypothesisId:'B'})}).catch(()=>{});
+    // #endregion
+    return;
+  }
+
   // If env values are configured
   if (ENV_URL && ENV_KEY) {
     try {
       supabaseClient = window.supabase.createClient(ENV_URL, ENV_KEY);
       console.log("Supabase Client initialized via environment variables.");
+      // #region agent log
+      fetch('http://127.0.0.1:7279/ingest/9413dc50-3da9-4e3a-bc0f-a566f606853d',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'57b405'},body:JSON.stringify({sessionId:'57b405',location:'app.js:initBackend',message:'Supabase client from env',data:{isDemoMode:false},timestamp:Date.now(),hypothesisId:'C'})}).catch(()=>{});
+      // #endregion
       return;
     } catch (e) {
       console.error("Failed to initialize Supabase via env", e);
@@ -163,6 +181,9 @@ async function initBackend() {
       const config = JSON.parse(savedConfig);
       supabaseClient = window.supabase.createClient(config.url, config.key);
       console.log("Supabase Client initialized via local storage config.");
+      // #region agent log
+      fetch('http://127.0.0.1:7279/ingest/9413dc50-3da9-4e3a-bc0f-a566f606853d',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'57b405'},body:JSON.stringify({sessionId:'57b405',location:'app.js:initBackend',message:'Supabase client from localStorage',data:{isDemoMode:false},timestamp:Date.now(),hypothesisId:'C'})}).catch(()=>{});
+      // #endregion
       return;
     } catch (e) {
       console.error("Failed to parse saved Supabase configuration", e);
@@ -172,35 +193,95 @@ async function initBackend() {
   // Fallback to Demo Mode
   isDemoMode = true;
   console.warn("No Supabase configuration detected. Operating in Demo/Sandbox Mock mode.");
+  // #region agent log
+  fetch('http://127.0.0.1:7279/ingest/9413dc50-3da9-4e3a-bc0f-a566f606853d',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'57b405'},body:JSON.stringify({sessionId:'57b405',location:'app.js:initBackend',message:'Demo mode fallback',data:{isDemoMode:true},timestamp:Date.now(),hypothesisId:'C'})}).catch(()=>{});
+  // #endregion
+}
+
+function getAuthRedirectUrl() {
+  return `${window.location.origin}${window.location.pathname}`;
+}
+
+async function handleOAuthCallback() {
+  if (isDemoMode || !supabaseClient) return;
+
+  const hasOAuthHash = window.location.hash.includes("access_token=");
+  const hasOAuthCode = window.location.search.includes("code=");
+  if (!hasOAuthHash && !hasOAuthCode) return;
+
+  // #region agent log
+  fetch('http://127.0.0.1:7279/ingest/9413dc50-3da9-4e3a-bc0f-a566f606853d',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'57b405'},body:JSON.stringify({sessionId:'57b405',location:'app.js:handleOAuthCallback',message:'OAuth callback detected',data:{hasOAuthHash,hasOAuthCode},timestamp:Date.now(),hypothesisId:'E'})}).catch(()=>{});
+  // #endregion
+
+  try {
+    const { data: { session }, error } = await supabaseClient.auth.getSession();
+    if (error) throw error;
+
+    if (session) {
+      currentUser = {
+        ...session.user,
+        full_name: session.user.user_metadata?.full_name || session.user.email?.split("@")[0] || "Creator"
+      };
+      window.history.replaceState({}, document.title, getAuthRedirectUrl());
+      showToast("Welcome ❤️ Signed in with Google.");
+      onLoginSuccess();
+      // #region agent log
+      fetch('http://127.0.0.1:7279/ingest/9413dc50-3da9-4e3a-bc0f-a566f606853d',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'57b405'},body:JSON.stringify({sessionId:'57b405',location:'app.js:handleOAuthCallback',message:'OAuth session restored',data:{userId:currentUser.id},timestamp:Date.now(),hypothesisId:'E'})}).catch(()=>{});
+      // #endregion
+    }
+  } catch (err) {
+    showToast("Google sign-in callback failed: " + err.message, "error");
+    // #region agent log
+    fetch('http://127.0.0.1:7279/ingest/9413dc50-3da9-4e3a-bc0f-a566f606853d',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'57b405'},body:JSON.stringify({sessionId:'57b405',location:'app.js:handleOAuthCallback',message:'OAuth callback error',data:{error:err.message},timestamp:Date.now(),hypothesisId:'E'})}).catch(()=>{});
+    // #endregion
+  }
 }
 
 // Session Check
 function checkSession() {
+  const demoUserRaw = localStorage.getItem("demo_user");
+  if (demoUserRaw) {
+    try {
+      currentUser = JSON.parse(demoUserRaw);
+      if (currentUser.isGuest) {
+        isDemoMode = true;
+      }
+      onLoginSuccess();
+      return;
+    } catch (e) {
+      localStorage.removeItem("demo_user");
+    }
+  }
+
   if (isDemoMode) {
-    const demoUser = localStorage.getItem("demo_user");
-    if (demoUser) {
-      currentUser = JSON.parse(demoUser);
+    return;
+  }
+
+  // Supabase Session Check
+  supabaseClient.auth.getSession().then(({ data: { session } }) => {
+    if (session) {
+      currentUser = {
+        ...session.user,
+        full_name: session.user.user_metadata?.full_name || session.user.email?.split("@")[0] || "Creator"
+      };
       onLoginSuccess();
     }
-  } else {
-    // Supabase Session Check
-    supabaseClient.auth.getSession().then(({ data: { session } }) => {
-      if (session) {
-        currentUser = session.user;
-        onLoginSuccess();
-      }
-    });
+  });
 
-    supabaseClient.auth.onAuthStateChange((_event, session) => {
-      if (session) {
-        currentUser = session.user;
-        onLoginSuccess();
-      } else {
-        currentUser = null;
-        onLogoutSuccess();
-      }
-    });
-  }
+  supabaseClient.auth.onAuthStateChange((_event, session) => {
+    if (localStorage.getItem("demo_user")) return;
+
+    if (session) {
+      currentUser = {
+        ...session.user,
+        full_name: session.user.user_metadata?.full_name || session.user.email?.split("@")[0] || "Creator"
+      };
+      onLoginSuccess();
+    } else {
+      currentUser = null;
+      onLogoutSuccess();
+    }
+  });
 }
 
 // Auth Panel Tabs Setup
@@ -222,7 +303,8 @@ function setupAuthTabs() {
   // Wire Forms
   loginForm.addEventListener("submit", handleLogin);
   registerForm.addEventListener("submit", handleRegister);
-  googleAuthBtn.addEventListener("click", handleGoogleMock);
+  googleAuthBtn.addEventListener("click", handleGoogleAuth);
+  guestAuthBtn.addEventListener("click", handleGuestLogin);
   navLogoutBtn.addEventListener("click", handleLogoutBtn);
 }
 
@@ -361,31 +443,90 @@ async function handleLogin(e) {
   }
 }
 
-// Mock Google auth
-function handleGoogleMock() {
+// Google sign-in (mock in demo mode, OAuth with Supabase when configured)
+async function handleGoogleAuth() {
+  // #region agent log
+  fetch('http://127.0.0.1:7279/ingest/9413dc50-3da9-4e3a-bc0f-a566f606853d',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'57b405'},body:JSON.stringify({sessionId:'57b405',location:'app.js:handleGoogleAuth',message:'Google auth clicked',data:{isDemoMode,hasSupabaseClient:!!supabaseClient},timestamp:Date.now(),hypothesisId:'A'})}).catch(()=>{});
+  // #endregion
+
   if (isDemoMode) {
-    const mockGoogleUser = { id: "google-mock-id", email: "sweetheart.creator@gmail.com", full_name: "Sweetheart Creator" };
+    const mockGoogleUser = {
+      id: `google-${crypto.randomUUID()}`,
+      email: "sweetheart.creator@gmail.com",
+      full_name: "Sweetheart Creator"
+    };
     localStorage.setItem("demo_user", JSON.stringify(mockGoogleUser));
     currentUser = mockGoogleUser;
-    showToast("Welcome ❤️ Let's create a beautiful surprise.");
+    showToast("Welcome ❤️ Signed in with Google (demo mode).");
     onLoginSuccess();
-  } else {
-    // Supabase Google Auth
-    supabaseClient.auth.signInWithOAuth({
+    // #region agent log
+    fetch('http://127.0.0.1:7279/ingest/9413dc50-3da9-4e3a-bc0f-a566f606853d',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'57b405'},body:JSON.stringify({sessionId:'57b405',location:'app.js:handleGoogleAuth',message:'Demo Google login success',data:{userId:mockGoogleUser.id},timestamp:Date.now(),hypothesisId:'A'})}).catch(()=>{});
+    // #endregion
+    return;
+  }
+
+  if (!supabaseClient) {
+    showToast("Google sign-in requires Supabase. Use Guest Mode or email login.", "error");
+    return;
+  }
+
+  try {
+    const redirectTo = getAuthRedirectUrl();
+    const { data, error } = await supabaseClient.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: window.location.origin
+        redirectTo,
+        queryParams: {
+          access_type: "offline",
+          prompt: "consent"
+        }
       }
     });
+
+    if (error) throw error;
+
+    // #region agent log
+    fetch('http://127.0.0.1:7279/ingest/9413dc50-3da9-4e3a-bc0f-a566f606853d',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'57b405'},body:JSON.stringify({sessionId:'57b405',location:'app.js:handleGoogleAuth',message:'OAuth redirect initiated',data:{redirectTo,hasUrl:!!data?.url},timestamp:Date.now(),hypothesisId:'D'})}).catch(()=>{});
+    // #endregion
+
+    if (data?.url) {
+      window.location.assign(data.url);
+    }
+  } catch (err) {
+    showToast(err.message || "Google sign-in failed. Check Supabase Google provider settings.", "error");
+    // #region agent log
+    fetch('http://127.0.0.1:7279/ingest/9413dc50-3da9-4e3a-bc0f-a566f606853d',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'57b405'},body:JSON.stringify({sessionId:'57b405',location:'app.js:handleGoogleAuth',message:'Google OAuth error',data:{error:err.message},timestamp:Date.now(),hypothesisId:'A'})}).catch(()=>{});
+    // #endregion
   }
+}
+
+function handleGuestLogin() {
+  const guestUser = {
+    id: `guest-${crypto.randomUUID()}`,
+    email: "guest@local",
+    full_name: "Guest Creator",
+    isGuest: true
+  };
+
+  isDemoMode = true;
+  localStorage.setItem("demo_user", JSON.stringify(guestUser));
+  currentUser = guestUser;
+  showToast("Welcome Guest ❤️ Explore the creator dashboard without signing up.");
+  onLoginSuccess();
+
+  // #region agent log
+  fetch('http://127.0.0.1:7279/ingest/9413dc50-3da9-4e3a-bc0f-a566f606853d',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'57b405'},body:JSON.stringify({sessionId:'57b405',location:'app.js:handleGuestLogin',message:'Guest login success',data:{userId:guestUser.id},timestamp:Date.now(),hypothesisId:'guest'})}).catch(()=>{});
+  // #endregion
 }
 
 // Logout Handler
 async function handleLogoutBtn() {
-  if (isDemoMode) {
+  const wasGuest = currentUser?.isGuest;
+
+  if (wasGuest || isDemoMode) {
     localStorage.removeItem("demo_user");
     currentUser = null;
-    showToast("Logged out from Sandbox Mock.");
+    showToast(wasGuest ? "Guest session ended." : "Logged out from Sandbox Mock.");
     onLogoutSuccess();
   } else {
     await supabaseClient.auth.signOut();
